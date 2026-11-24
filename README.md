@@ -18,10 +18,54 @@ half_add_sub.v	Arithmetic-circuit RTL
 half_add_sub_tb.v	Stimulus and VCD generation
 
 ### Verilog Program
-```
-```
-### Testbench Program
+module basic_gates (
+    input  wire a,
+    input  wire b,
+    output wire y_and,
+    output wire y_or,
+    output wire y_not
+);
 
+    assign y_and = a & b;   // AND gate
+    assign y_or  = a | b;   // OR gate
+    assign y_not = ~a;      // NOT gate (inverter)
+
+endmodule
+
+
+### Testbench Program
+module tb2;
+
+    reg a, b;
+    wire y_and, y_or, y_not;
+
+    // Instantiate the design under test (DUT)
+    basic_gates uut (
+        .a(a),
+        .b(b),
+        .y_and(y_and),
+        .y_or(y_or),
+        .y_not(y_not)
+    );
+
+    initial begin
+        // ---- VCD dump setup ----
+        $dumpfile("basic_gates.vcd");   // name of the VCD file to be generated
+        $dumpvars(0, tb2);               // dump all signals in this testbench hierarchy
+
+        // ---- Apply all 4 input combinations ----
+        $monitor("Time=%0t a=%b b=%b | AND=%b OR=%b NOT(a)=%b", $time, a, b, y_and, y_or, y_not);
+
+        a = 0; b = 0; #10;
+        a = 0; b = 1; #10;
+        a = 1; b = 0; #10;
+        a = 1; b = 1; #10;
+
+        #10 $finish;
+#10;
+    end
+
+endmodule
 
 ### Truth Table
 
@@ -84,6 +128,10 @@ The Half Adder and Half Subtractor were realized using Verilog HDL:
 The design was compiled and simulated using Synopsys VCS, and the functionality was verified using DVE waveform analysis, matching the expected truth table.
 
 ### Output
+<img width="1600" height="804" alt="WhatsApp Image 2026-11-24 at 12 27 31 PM (1)" src="https://github.com/user-attachments/assets/f9a48a6b-3f61-4981-b025-b1eb659795e6" />
+<img width="1600" height="793" alt="WhatsApp Image 2026-11-24 at 12 27 32 PM (1)" src="https://github.com/user-attachments/assets/66c0ac90-516c-4b7e-87fe-faa292aaab9c" />
+
+
 
 
 ### Viva-Voce Questions
